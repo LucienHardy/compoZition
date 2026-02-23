@@ -1,0 +1,391 @@
+\documentclass[10pt]{article}
+%\usepackage{mathtools}
+\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{compozition}
+%\usepackage{bm}
+\usepackage{graphicx}
+\usepackage[all]{xy}
+\usepackage{MnSymbol}
+%\usepackage{mathrsfs} %for \mathscr
+\usepackage{comment}
+
+\usepackage{dsfont} % provided double stroke font.
+\usepackage{undertilde}
+
+
+\usepackage{verbatim}
+
+\usepackage{stmaryrd}
+
+\usepackage{relsize}
+
+
+\newcounter{mycount} \setcounter{mycount}{0}
+\newcommand{\Example}{\vspace{3mm}\noindent \textbf{Example \stepcounter{mycount}\arabic{mycount}}}                 
+
+
+
+\title{\textbf{The compoZition drawing package - examples}}
+
+\author{Lucien Hardy\\
+\textit{Perimeter Institute,}\\
+\textit{31 Caroline Street North,}\\
+\textit{Waterloo, Ontario N2L 2Y5, Canada}}
+\date{}
+
+
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+The compoZition package (in \verb+compozition.sty+) is a large number of commands defined (mostly) using TikZ that make it possible to draw circuit type diagrams for Quantum Theory.  This is available at
+\begin{center}
+\url{https://github.com/LucienHardy/compoZition}
+\end{center}
+The spirit is to give the code a \lq\lq LaTeX feel" so it is more like typesetting math in LaTeX than is usually the case for LaTeX drawing packages. The \lq\lq Z" in compoZition is homage to TikZ.  Thank you Till Tantau and the others involved in developing TikZ.
+
+This document provides some simple examples to show how to use the compoZition package.  
+Drawings are contained between 
+\begin{center}
+\verb+\begin{compose}+ and \verb+\end{compose}+ 
+\end{center}
+or
+\begin{center}
+\verb+\begin{Compose}{0}{1}+ and \verb+\end{Compose}+
+\end{center}
+where the \verb+{0}{1}+ shift the picture horizontally and vertically (the latter is especially useful).  I have also put the examples below in displayed equation mode, but that is not necessary.
+
+
+The package was developed according to my needs whilst writing papers and a book. In any language there is a tradeoff between having fewer \lq\lq words" and having concise expression of \lq\lq ideas".   The philosophy here has been to have a large number of words (i.e. commands) so that drawings can be concisely expressed.  That being said, this package only works well for drawing the kind of pictures I have envisioned (mostly corresponding to Quantum networks).  If you want to draw something else then TikZ is the best bet.  Not all the obvious commands have been defined.  The code seems to work pretty well (thanks to TikZ) but there are a number of things I would do differently were I to start afresh.  There are a few bugs.  If you are interested in improving this package and have the right kind of technical expertise, please get in touch with me.
+
+In addition to this example file, I have provided a long table of commands extracted from compoZition.sty by ChatGPT in the file \verb+macros_long_table.tex+.  I have also provided the file I used to test code whilst writing the book in the file \verb+LongListofExamples.tex+.  This is a \lq\lq hot mess" but contains probably more than 2000 examples.
+
+
+\section{Simple examples}
+
+\Example 
+\begin{equation}
+\begin{compose}
+\crectangle{A}{2.5}{2.3}{0,0} \csymbol{B}
+\thispoint{d}{0,-4.5} \thispoint{u}{0,4.5}
+\jointbnoarrow[right]{d}{0}{A}{0} \csymbol{a}
+\jointbnoarrow[left]{A}{0}{u}{0} \csymbol{b}
+\end{compose}
+\end{equation}
+is drawn using the code
+\begin{verbatim}
+\begin{equation}
+\begin{compose}
+\crectangle{A}{2.5}{2.3}{0,0} \csymbol{B}
+\thispoint{d}{0,-4.5} \thispoint{u}{0,4.5}
+\jointbnoarrow[right]{d}{0}{A}{0} \csymbol{a}
+\jointbnoarrow[left]{A}{0}{u}{0} \csymbol{b}
+\end{compose}
+\end{equation}
+\end{verbatim}
+Notes
+\begin{enumerate}
+\item \verb+\crectangle{A}{2.5}{2.3}{0,0}+ draws a rectangle called \lq\lq $A$" of width 2.5 and height 2.3 centred at position $(0,0)$.  
+\item \verb+\csymbol{B}+ puts the letter $\mathsf{B}$ inside. 
+\item \verb+\thispoint{u}{0,4.5}+ attaches the name \lq\lq $u$" to the point $(0,4.5)$
+\item \verb+\jointbnoarrow[left]{A}{0}{u}{0}+ draws a line from the top of the rectangle to the bottom of the point $u$.  The numbers (0s in this case) will be explained in the next example.
+\item The optional argument \verb+[left]+ tells the \verb+\csymbol{b}+ to place the $\mathsf{b}$ to the left of the line.  Other TikZ commands like \verb+above right+ work as well.  
+\end{enumerate}
+
+\Example
+\begin{equation} 
+\begin{Compose}{0}{0}\setdefaultfont{\mathsfb} \setsecondfont{\mathsf}
+\Crectangle[thin]{A}{2.5}{1.5}{0,-6} 
+\Crectangle[dashed]{B}{1.5}{1.5}{3.5,0}  
+\crectangle{C}{1.5}{1.5}{2,6} \csymbol{D}
+
+\jointbnoarrow[left]{A}{-2}{C}{-1} \csymbolalt[-5,0]{a}
+\joinbt[below right]{B}{0}{A}{1}  \csymbolalt[5,-5]{b}
+\jointb[above right]{B}{0}{C}{1}  \csymbolalt{a}
+\end{Compose}
+\end{equation}
+is drawn using 
+\begin{verbatim}
+\begin{equation}
+\begin{Compose}{0}{0}\setdefaultfont{\mathsfb} \setsecondfont{\mathsf}
+\Crectangle[thin]{A}{2.5}{1.5}{0,-6}
+\Crectangle[dashed]{B}{1.5}{1.5}{3.5,0}
+\crectangle{C}{1.5}{1.5}{2,6} \csymbol{D}
+
+\jointbnoarrow[left]{A}{-2}{C}{-1} \csymbolalt[-5,0]{a}
+\joinbt[below right]{B}{0}{A}{1}  \csymbolalt[5,-5]{b}
+\jointb[above right]{B}{0}{C}{1}  \csymbolalt{a}
+\end{Compose}
+\end{equation}
+\end{verbatim}
+Notes
+\begin{enumerate}
+\item An optional command in square brackets for objects like \verb+\crectangle+ can be used with TikZ commands. Here we have illustrated the use of \verb+thin+ and \verb+dashed+.  We could also use a TikZ \verb+fill=gray+ command in here, TikZ style.  
+\item If we have \verb+\Crectangle+ then the name of the object is placed inside, whereas if we have 
+\verb+\crectangle+ then the name does not appear inside, but can be placed inside using \verb+\csymbol+ afterwards.  
+\item The font for \verb+\csymbol+ is set by \verb+\setdefaultfont+.  If not set then this defaults to \verb+\mathsf+.  
+\item It is possible to set multiple fonts.  We have 
+\begin{enumerate}
+\item \verb+\setsecondfont+ (for \verb+\csymbolalt+) 
+\item \verb+\setthirdfont+ (for \verb+\csymbolthird+), 
+\item \verb+\setfourthfont+ (for \verb+\csymbolfourth+).  
+\end{enumerate}
+These default to \verb+\mathnormal+ (the normal math font).   
+\item There is also \verb+\csymbolnorm+ which always uses normal math font. 
+\item The font \verb+\mathsfb+ is a bold \verb+\mathsf+ defined in compoZition.  
+\item There are fine-tuning parameters in \verb+\csymbol[5,-6]+ and the others that allow small displacements in the placement of the symbol.
+\item The join command \verb+\jointbnoarrow[left]{A}{-2}{C}{-1}+ joins the top of $A$ at position -2 to the bottom of $B$ at position -1 (non-integer positions are allowed).     
+\end{enumerate}
+
+
+\Example
+\begin{equation}
+\begin{Compose}{0}{0} \setsecondfont{\mathsf}
+\crectangle{A}{2.5}{2.3}{0,0} \csymbol{B}
+\relpoint{A}{0,-4.5}{Ad} \jointbnoarrow[right]{Ad}{0}{A}{0} \csymbolalt{a}
+\relpoint{A}{0,4.5}{Ed} \jointbnoarrow[right]{A}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsf}
+\crectangledouble{A}{2.5}{2.3}{0,0} \csymbol{\hat{B}}
+\relpoint{A}{0,-4.5}{Ad} \jointbnoarrow[right]{Ad}{0}{A}{0} \csymbolalt{a}
+\relpoint{A}{0,4.5}{Ed} \jointbnoarrow[right]{A}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsf}
+\crectangledleft{A}{1.5}{2.3}{-2.2,0} \csymbol{B}
+\relpoint{A}{0,-4.5}{Ad} \jointbleft[right]{Ad}{0}{A}{0} \csymbolalt{a}
+%\relpoint{A}{1,4.5}{Cd} \jointbleft[right]{A}{1}{Cd}{0} \csymbolalt{a}
+\relpoint{A}{0,4.5}{Ed} \jointbleft[right]{A}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsf}
+\crectangledright{AA}{1.5}{2.3}{2.2,0} \csymbol{B}
+\relpoint{AA}{0,-4.5}{Ad} \jointbright[right]{Ad}{0}{AA}{0} \csymbolalt{a}
+\relpoint{AA}{0,4.5}{Ed} \jointbright[right]{AA}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+\end{equation}
+is drawn using
+\begin{verbatim}
+\begin{equation}
+\begin{Compose}{0}{0} \setsecondfont{\mathsf}
+\crectangle{A}{2.5}{2.3}{0,0} \csymbol{B}
+\relpoint{A}{0,-4.5}{Ad} \jointbnoarrow[right]{Ad}{0}{A}{0} \csymbolalt{a}
+\relpoint{A}{0,4.5}{Ed} \jointbnoarrow[right]{A}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsf}
+\crectangledouble{A}{2.5}{2.3}{0,0} \csymbol{\hat{B}}
+\relpoint{A}{0,-4.5}{Ad} \jointbnoarrow[right]{Ad}{0}{A}{0} \csymbolalt{a}
+\relpoint{A}{0,4.5}{Ed} \jointbnoarrow[right]{A}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsf}
+\crectangledleft{A}{1.5}{2.3}{-2.2,0} \csymbol{B}
+\relpoint{A}{0,-4.5}{Ad} \jointbleft[right]{Ad}{0}{A}{0} \csymbolalt{a}
+%\relpoint{A}{1,4.5}{Cd} \jointbleft[right]{A}{1}{Cd}{0} \csymbolalt{a}
+\relpoint{A}{0,4.5}{Ed} \jointbleft[right]{A}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsf}
+\crectangledright{AA}{1.5}{2.3}{2.2,0} \csymbol{B}
+\relpoint{AA}{0,-4.5}{Ad} \jointbright[right]{Ad}{0}{AA}{0} \csymbolalt{a}
+\relpoint{AA}{0,4.5}{Ed} \jointbright[right]{AA}{0}{Ed}{0} \csymbolalt{b}
+\end{Compose}
+\end{equation}
+\end{verbatim}
+Notes
+\begin{enumerate}
+\item This introduces \verb+\crectangledouble+, \verb+\crectangledleft+, and \verb+\crectangledright+. 
+\item If we have an uppercase C (for example \verb+\Crectangledouble+) then the name of the object is printed inside in whatever font \verb+\setdefaultfont+ has been set to. 
+\item This example also introduces \verb+\relpoint{A}{0,-4.5}{Ad}+ which defines a new point \lq\lq $Ad$" at a relative displacement $(0,-4.5)$ from the already defined point \lq\lq A".
+\end{enumerate}
+
+\Example
+\begin{equation}
+\begin{Compose}{0}{0} \setsecondfont{\mathsfb}
+\ccircle{A}{2.2}{0,0} \csymbol{B}
+\relpoint{A}{60:4.5}{c} \joincc[above left]{A}{60}{c}{-120} \csymbolalt{b}
+\relpoint{A}{-120:4.5}{a} \joincc[below right]{a}{60}{A}{-120} \csymbolalt{a}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsfb}
+\ccircledouble{A}{2.2}{0,0} \csymbol{\hat{B}}
+\relpoint{A}{60:4.5}{c} \joincc[above left]{A}{60}{c}{-120} \csymbolalt{b}
+\relpoint{A}{-120:4.5}{a} \joincc[below right]{a}{60}{A}{-120} \csymbolalt{a}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsfb}
+\csemidleft{A}{2.2}{-0.8,0} \csymbol{B}
+\relpoint{A}{120:4.5}{c} \joincctriangleb[above right]{A}{120}{c}{-60} \csymbolalt{b}
+\relpoint{A}{-120:4.5}{a} \joincctriangleb[below right]{a}{60}{A}{-120} \csymbolalt{a}
+\end{Compose}
+~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsfb}
+\csemidright{AA}{2.2}{0.8,0} \csymbol{B}
+\relpoint{AA}{60:4.5}{c} \joincctrianglew[above left]{AA}{60}{c}{-120} \csymbolalt{b}
+\relpoint{AA}{-60:4.5}{a} \joincctrianglew[below left]{a}{120}{AA}{-60} \csymbolalt{a}
+\end{Compose}
+\end{equation}
+is drawn using
+\begin{verbatim}
+\begin{equation}
+\begin{Compose}{0}{0} \setsecondfont{\mathsfb}
+\ccircle{A}{2.2}{0,0} \csymbol{B}
+\relpoint{A}{60:4.5}{c} \joincc[above left]{A}{60}{c}{-120} \csymbolalt{b}
+\relpoint{A}{-120:4.5}{a} \joincc[below right]{a}{60}{A}{-120} \csymbolalt{a}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsfb}
+\ccircledouble{A}{2.2}{0,0} \csymbol{\hat{B}}
+\relpoint{A}{60:4.5}{c} \joincc[above left]{A}{60}{c}{-120} \csymbolalt{b}
+\relpoint{A}{-120:4.5}{a} \joincc[below right]{a}{60}{A}{-120} \csymbolalt{a}
+\end{Compose}
+~~~~~~~~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsfb}
+\csemidleft{A}{2.2}{-0.8,0} \csymbol{B}
+\relpoint{A}{120:4.5}{c} \joincctriangleb[above right]{A}{120}{c}{-60} \csymbolalt{b}
+\relpoint{A}{-120:4.5}{a} \joincctriangleb[below right]{a}{60}{A}{-120} \csymbolalt{a}
+\end{Compose}
+~~~~
+\begin{Compose}{0}{0}\setdefaultfont{} \setsecondfont{\mathsfb}
+\csemidright{AA}{2.2}{0.8,0} \csymbol{B}
+\relpoint{AA}{60:4.5}{c} \joincctrianglew[above left]{AA}{60}{c}{-120} \csymbolalt{b}
+\relpoint{AA}{-60:4.5}{a} \joincctrianglew[below left]{a}{120}{AA}{-60} \csymbolalt{a}
+\end{Compose}
+\end{equation}
+\end{verbatim}
+Note the following
+\begin{enumerate}
+  \item These examples shows how to use the circle \verb+\ccircle{A}{2.2}{0,0}+ and the double bordered circle \verb+\ccircledouble{A}{2.2}{0,0}+
+  \item These can be joined by \verb+\joincc[above left]{A}{60}{c}{-120}+. The numbers are angles. 
+  \item Also used are semicircles \verb+\csemidleft{A}{2.2}{-0.8,0}+ and \verb+\csemidright{AA}{2.2}{0.8,0}+ with a double border on the curved part.  
+  \item These can be joined by \verb+\joincctriangleb+ (black triangle arrowhead) and \verb+\joincctrianglew+ (white triangle arrowhead).  Unfortunately, these semicircles do not work with \verb+\ccjoin+ because of a coding issue.    
+  \item If we have an uppercase \lq\lq C" in \verb+\ccircle+ or any of the others then the object name is printed inside the object in the default font (set by \verb+\setdefaultfont+).  
+  \item We can specify coordinates in polar coordinates (e.g.\ \verb+{120:4.5}+) as in TikZ.     
+\end{enumerate}
+
+\Example
+\begin{equation}
+\begin{Compose}{0}{-0.65} \setsecondfont{\mathsfb}
+\Ccircle{A}{1.5}{0,0}  \Ccircle[thin]{B}{1.5}{6,0} \Ccircle[dashed]{C}{1.5}{3,5}
+
+\joincc[below]{B}{-160}{A}{-20} \csymbolalt{c}
+\joincc[above left]{A}{80}{C}{-140} \csymbolalt{b}
+\joincc[right]{C}{-40}{B}{100} \csymbolalt{a}
+\end{Compose}
+\end{equation}
+is drawn by
+\begin{verbatim}
+\begin{equation}
+\begin{Compose}{0}{-0.65} \setsecondfont{\mathsfb}
+\Ccircle{A}{1.5}{0,0}  \Ccircle[thin]{B}{1.5}{6,0} \Ccircle[dashed]{C}{1.5}{3,5}
+
+\joincc[below]{B}{-160}{A}{-20} \csymbolalt{c}
+\joincc[above left]{A}{80}{C}{-140} \csymbolalt{b}
+\joincc[right]{C}{-40}{B}{100} \csymbolalt{a}
+\end{Compose}
+\end{equation}
+\end{verbatim}
+This illustrates the use of \verb+thin+ and \verb+dashed+ for a circle. 
+
+
+\Example
+\begin{equation}
+\begin{Compose}{0}{0}
+\cobjectwhite{\thetooth}{B}{1}{1}{-3,0} \csymbol{A}
+\cobjectwhite{\theblob}{B}{1}{1}{1.6,1.5} \csymbol{B}
+\end{Compose}
+\end{equation}
+is drawn by
+\begin{verbatim}
+\begin{equation}
+\begin{Compose}{0}{0}
+\cobjectwhite{\thetooth}{B}{1}{1}{-3,0} \csymbol{A}
+\cobjectwhite{\theblob}{B}{1}{1}{1.6,1.5} \csymbol{B}
+\end{Compose}
+\end{equation}
+\end{verbatim}
+There are also \verb+\theflag+ and \verb+\thegelato+.  
+
+\Example
+\begin{equation}
+\begin{Compose}{0}{-0.1}\setdefaultfont{\mathsfb}\setsecondfont{\mathtts} \setthirdfont{\mathsfs}
+\Crectangle{D}{1.5}{2.5}{0,0}
+\relpoint{D}{0,-4}{DD} \csymbolthird[0,-20]{b}
+\relpoint{D}{0,4}{DU} \csymbolthird[0,20]{a}
+\jointbnoarrow{D}{0}{DU}{0}
+\jointbnoarrow{DD}{0}{D}{0}
+\relpoint{D}{-4,1.5}{DLu} \csymbolalt[-20,0]{x}
+\relpoint{D}{-4,-1.5}{DLd} \csymbolalt[-20,0]{x}
+\joinrlnoarrowthick{DLu}{0}{D}{1.5}
+\joinlrnoarrowthick{D}{-1.5}{DLd}{0}
+\relpoint{D}{4,1.5}{DRu}
+\joinrl{D}{1.5}{DRu}{0}  \csymbolalt[0,5]{y}
+\end{Compose}
+\end{equation}
+\begin{verbatim}
+\begin{equation}
+\begin{Compose}{0}{-0.1}\setdefaultfont{\mathsfb}\setsecondfont{\mathtts} \setthirdfont{\mathsfs}
+\Crectangle{D}{1.5}{2.5}{0,0}
+\relpoint{D}{0,-4}{DD} \csymbolthird[0,-20]{b}
+\relpoint{D}{0,4}{DU} \csymbolthird[0,20]{a}
+\jointbnoarrow{D}{0}{DU}{0}
+\jointbnoarrow{DD}{0}{D}{0}
+\relpoint{D}{-4,1.5}{DLu} \csymbolalt[-20,0]{x}
+\relpoint{D}{-4,-1.5}{DLd} \csymbolalt[-20,0]{x}
+\joinrlnoarrowthick{DLu}{0}{D}{1.5}
+\joinlrnoarrowthick{D}{-1.5}{DLd}{0}
+\relpoint{D}{4,1.5}{DRu}
+\joinrl{D}{1.5}{DRu}{0}  \csymbolalt[0,5]{y}
+\end{Compose}
+\end{equation}
+\end{verbatim}
+This example illustrates the use of more joins.
+\begin{enumerate}
+  \item \verb+\joinrlnoarrow+, \verb+\joinlrnoarrow+, \verb+\joinrl+.  There are a large number of joins defined including things like \verb+\joinrt+ which joins the right side of a box to the top of a box (or \verb+\joinrtnoarrow+ for when there is no arrow).       
+  \item Note that \verb+\relpoint+ followed by any variant of \verb+\csymbol+ will place a symbol at the new point being defined (we have used the fine tuning to slightly displace this). This also works for \verb+\thispoint+.  
+\end{enumerate}
+
+\Example
+\begin{equation}
+\begin{Compose}{0}{0} \setdefaultfont{\mathsfs} \setdefaultarrow{angle 60}
+\Ccircle[thin]{c}{0.8}{-3,3} \Ccircle[thin]{d}{0.8}{3,3}
+\Ccircle[thin]{a}{0.8}{-3,-3} \Ccircle[thin]{b}{0.8}{3,-3}
+\joincc{a}{90}{c}{-90} \joincc{b}{90}{d}{-90}
+\joinccvararrow{a}{45}{d}{-135}{0.7} \joinccontopvararrow{b}{135}{c}{-45}{0.7}
+\end{Compose}
+\end{equation}
+is drawn by
+\begin{verbatim}
+\begin{equation}
+\begin{Compose}{0}{0} \setdefaultfont{\mathsfs} \setdefaultarrow{angle 60}
+\Ccircle[thin]{c}{0.8}{-3,3} \Ccircle[thin]{d}{0.8}{3,3}
+\Ccircle[thin]{a}{0.8}{-3,-3} \Ccircle[thin]{b}{0.8}{3,-3}
+\joincc{a}{90}{c}{-90} \joincc{b}{90}{d}{-90}
+\joinccvararrow{a}{45}{d}{-135}{0.7} \joinccontopvararrow{b}{135}{c}{-45}{0.7}
+\end{Compose}
+\end{equation}
+\end{verbatim}
+This illustrates
+\begin{enumerate}
+  \item The use of a different default arrow head (\verb+angle 60+ is TikZ code).  
+  \item The use of \verb+\joinccvararrow+ which has an extra argument to indicate the fraction along the arrow at which the arrowhead appears.
+  \item The use of \verb+\joinccontopvararrow+ which has a thin white border so that when it is drawn after another join it appears to be on top.  
+\end{enumerate}
+
+
+
+\end{document}
+
+
+
+
+
